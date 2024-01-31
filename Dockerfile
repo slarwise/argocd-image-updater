@@ -12,12 +12,11 @@ RUN mkdir -p dist && \
 
 FROM alpine:latest
 
-RUN apk update && \
-    apk upgrade && \
-    apk add ca-certificates git openssh-client python3 py3-pip tini && \
-    pip3 install --upgrade pip && \
-    pip3 install awscli && \
-    rm -rf /var/cache/apk/*
+RUN apk update
+RUN apk upgrade
+RUN apk add ca-certificates git openssh-client python3 py3-pip tini aws-cli
+RUN pip3 install --no-cache --upgrade --break-system-packages pip
+RUN rm -rf /var/cache/apk/*
 
 RUN mkdir -p /usr/local/bin
 RUN mkdir -p /app/config
