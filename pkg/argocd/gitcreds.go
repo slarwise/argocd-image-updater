@@ -41,7 +41,7 @@ func getCredsFromArgoCD(wbc *WriteBackConfig, kubeClient *kube.KubernetesClient)
 	if err != nil {
 		fmt.Printf("DEBUGGY! Got error when asking for config map `argocd-cm` from settingsMgr: %s", err)
 	} else {
-		fmt.Printf("DEBUGGY! Got config map `argocd-cm` from settingsMgr: name: %s, namespace", cm.Name, cm.Namespace)
+		fmt.Printf("DEBUGGY! Got config map `argocd-cm` from settingsMgr: name: %s, namespace\n", cm.Name, cm.Namespace)
 	}
 	argocdDB := db.NewDB(kubeClient.Namespace, settingsMgr, kubeClient.Clientset)
 	repo, err := argocdDB.GetRepository(ctx, wbc.GitRepo)
