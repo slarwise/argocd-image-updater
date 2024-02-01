@@ -8,6 +8,7 @@ import (
 
 	"github.com/argoproj/argo-cd/v2/pkg/apis/application/v1alpha1"
 	"github.com/argoproj/argo-cd/v2/util/db"
+	argocdgit "github.com/argoproj/argo-cd/v2/util/git"
 	"github.com/argoproj/argo-cd/v2/util/settings"
 
 	"github.com/argoproj-labs/argocd-image-updater/ext/git"
@@ -50,7 +51,7 @@ func getCredsFromArgoCD(wbc *WriteBackConfig, kubeClient *kube.KubernetesClient)
 	if !repo.HasCredentials() {
 		return nil, fmt.Errorf("credentials for '%s' are not configured in Argo CD settings", wbc.GitRepo)
 	}
-	return repo.GetGitCreds(nil), nil
+	return repo.GetGitCreds(&argocdgit.NoopCredsStore{}), nil
 }
 
 // getCredsFromSecret loads repository credentials from secret
