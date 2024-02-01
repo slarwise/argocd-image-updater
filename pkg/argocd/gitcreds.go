@@ -16,7 +16,7 @@ import (
 
 // getGitCredsSource returns git credentials source that loads credentials from the secret or from Argo CD settings
 func getGitCredsSource(creds string, kubeClient *kube.KubernetesClient, wbc *WriteBackConfig) (GitCredsSource, error) {
-	fmt.Printf("creds: %s\n", creds)
+	fmt.Printf("DEBUGGY! creds: %s\n", creds)
 	switch {
 	case creds == "repocreds":
 		return func(app *v1alpha1.Application) (git.Creds, error) {
@@ -35,7 +35,14 @@ func getCredsFromArgoCD(wbc *WriteBackConfig, kubeClient *kube.KubernetesClient)
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	settingsMgr := settings.NewSettingsManager(ctx, kubeClient.Clientset, kubeClient.Namespace)
+	settingsMgr := settings.NewSettingsManager(ctx, kubeClient.Clientset, "argocd")
+	fmt.Printf("DEBUGGY! The namespace of the settingsMgr: `%s`\n", settingsMgr.GetNamespace())
+	cm, err := settingsMgr.GetConfigMapByName("argocd-cm")
+	if err != nil {
+		fmt.Printf("DEBUGGY! Got error when asking for config map `argocd-cm` from settingsMgr: %s", err)
+	} else {
+		fmt.Printf("DEBUGGY! Got config map `argocd-cm` from settingsMgr: name: %s, namespace", cm.Name, cm.Namespace)
+	}
 	argocdDB := db.NewDB(kubeClient.Namespace, settingsMgr, kubeClient.Clientset)
 	repo, err := argocdDB.GetRepository(ctx, wbc.GitRepo)
 	if err != nil {
