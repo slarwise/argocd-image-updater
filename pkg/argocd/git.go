@@ -130,6 +130,7 @@ type changeWriter func(app *v1alpha1.Application, wbc *WriteBackConfig, gitC git
 func commitChangesGit(app *v1alpha1.Application, wbc *WriteBackConfig, changeList []ChangeEntry, write changeWriter) error {
 	logCtx := log.WithContext().AddField("application", app.GetName())
 	creds, err := wbc.GetCreds(app)
+	logCtx.Infof("%v\n", creds)
 	if err != nil {
 		return fmt.Errorf("could not get creds for repo '%s': %v", wbc.GitRepo, err)
 	}

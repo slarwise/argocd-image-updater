@@ -16,6 +16,7 @@ import (
 
 // getGitCredsSource returns git credentials source that loads credentials from the secret or from Argo CD settings
 func getGitCredsSource(creds string, kubeClient *kube.KubernetesClient, wbc *WriteBackConfig) (GitCredsSource, error) {
+	fmt.Printf("creds: %s\n", creds)
 	switch {
 	case creds == "repocreds":
 		return func(app *v1alpha1.Application) (git.Creds, error) {
